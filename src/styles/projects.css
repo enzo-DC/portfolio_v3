@@ -64,3 +64,28 @@
 @media (max-width: 999px){
   .reel-track{ width: auto; }
 }
+
+/* ---------------------------------------------------------------------------
+   CADRAGE de la section epinglee — arbitre avec le client.
+
+   Une fois `pin:true` actif (§8.5a), la hauteur de #projects est verrouillee
+   sur celle du viewport, alors que son contenu en reclame 947px : 150px de
+   padding haut + 110 bas (herites de `.section`) + 118px d'en-tete + 569px
+   de piste. Mesure a 1100x800 : l'etiquette d'acte tombait a top:-58 (hors
+   ecran) et le titre a top:-7.
+
+   Le padding est ici exprime en `vh` et non en `vw` : la contrainte est une
+   hauteur disponible, elle n'a aucune raison de varier avec la largeur.
+   Le padding de `.section` reste intact pour Hero, A propos et Contact.
+--------------------------------------------------------------------------- */
+@media (min-width: 1000px){
+  #projects{
+    padding-top: clamp(20px, 4vh, 90px);
+    padding-bottom: clamp(12px, 2.5vh, 60px);
+  }
+  /* La marge basse de l'en-tete vaut clamp(30px, 5vw, 50px) : elle est
+     indexee sur la LARGEUR, donc maximale (50px) sur les ecrans larges,
+     precisement ceux ou la hauteur peut manquer. On la reindexe sur la
+     hauteur disponible, comme le padding ci-dessus. */
+  #projects .projects-head{ margin-bottom: clamp(18px, 3vh, 50px); }
+}
