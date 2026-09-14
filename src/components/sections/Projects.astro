@@ -1,8 +1,24 @@
 ---
-// Projects — Acte I — "La seance", boucle sur projects.ts
+// Projects — Acte I, "La seance" (CLAUDE.md §3.3 pour le contenu,
+// §5.2 pour les styles, §6 pour les donnees).
+//
+// La bobine horizontale est pilotee par SceneTransitions (§8.5a) : pin +
+// scrub au-dela de 1000px, scroll-snap natif en CSS en dessous. L'id
+// `reel-track` est celui attendu par ce script, ne pas le renommer.
 import '../../styles/projects.css';
-
-// TODO : porter depuis CLAUDE.md §3.3 (contenu), §5.2 (styles), §6 (donnees). Stub d'arborescence, pas encore implemente.
+import { projects } from '../../content/projects';
+import Poster from './Poster.astro';
 ---
 
-<section id="projects" class="section"></section>
+<section id="projects" class="section" data-act="1">
+  <div class="projects-head">
+    <p class="act-tag">ACTE I</p>
+    <h2 class="section-title">La séance</h2>
+  </div>
+
+  <div class="reel-viewport">
+    <div class="reel-track" id="reel-track">
+      {projects.map((project) => <Poster project={project} />)}
+    </div>
+  </div>
+</section>

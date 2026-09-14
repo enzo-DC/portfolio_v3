@@ -42,3 +42,25 @@
   width: fit-content; border-bottom: 1px solid transparent; transition: border-color .2s;
 }
 .poster-link:hover{ border-color: var(--gold-bright); }
+
+/* ---------------------------------------------------------------------------
+   CORRECTION au CSS de la §5.2 — bug fonctionnel, pas cosmetique.
+
+   Le bloc mobile de la spec pose `overflow-x:auto`, `scroll-snap-type` et
+   `-webkit-overflow-scrolling:touch` sur `.reel-track` : l'intention est
+   sans ambiguite, la piste doit etre LE conteneur de defilement horizontal
+   sur mobile. Mais la regle de base lui donne `width: max-content`, jamais
+   annulee — la piste fait donc exactement la largeur de son contenu et
+   `overflow-x` n'a rien a faire defiler.
+
+   Mesure au navigateur a 390px de large : piste 985px, scrollWidth ==
+   clientWidth == 985, bord droit du 3e poster a 969px, le tout masque par
+   l'`overflow:hidden` de `.reel-viewport` et `#projects`. Resultat : les
+   projets 2 et 3 etaient inatteignables sur telephone.
+
+   `width:auto` contraint la piste a la largeur disponible ; ses enfants
+   flex debordent et `overflow-x:auto` redevient effectif.
+--------------------------------------------------------------------------- */
+@media (max-width: 999px){
+  .reel-track{ width: auto; }
+}

@@ -1,8 +1,40 @@
 ---
-// Poster — une carte de projet
+// Poster — une carte de projet (CLAUDE.md §3.3 pour le contenu, §5.2 pour
+// les styles, §6 pour le modele de donnees).
+import type { Project } from '../../content/projects';
 import '../../styles/projects.css';
 
-// TODO : porter depuis CLAUDE.md §3.3 et §5.2. Recoit un Project (§6) en prop. Stub d'arborescence, pas encore implemente.
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
 ---
 
-<article class="section"></article>
+<article class="poster" style={`--poster-tint: ${project.tint};`}>
+  <div class="poster-glow" aria-hidden="true"></div>
+
+  <p class="poster-index">{project.index}</p>
+  <h3 class="poster-title">{project.title}</h3>
+  <p class="poster-role">{project.role}</p>
+  <p class="poster-pitch">{project.pitch}</p>
+
+  {/* Le CSS de la §5.2 cible `.poster-tags span` comme enfants flex directs :
+      on garde donc des <span>, pas une liste. */}
+  <div class="poster-tags">
+    {project.tags.map((tag) => <span>{tag}</span>)}
+  </div>
+
+  <a
+    class="poster-link"
+    href={project.githubUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Voir le film sur GitHub
+    {/* Le ↗ est un indicateur de lien sortant reel (§3.3), pas une fleche
+        decorative : il reste sur ce seul type de lien. */}
+    <span aria-hidden="true">↗</span>
+    <span class="visually-hidden">(ouvre dans un nouvel onglet)</span>
+  </a>
+</article>
