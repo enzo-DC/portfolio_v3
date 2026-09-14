@@ -1,8 +1,49 @@
 ---
-// Hero — Acte 0 — prologue, titre ENZO / COUTEAU, sous-titre, cue de scroll
+// Hero — Acte 0 (CLAUDE.md §3.2 pour le contenu, §5.1 pour les styles).
+// La scene Three.js est montee en client:visible et rend elle-meme
+// <canvas id="hero-canvas"> (§8.4). Elle se demonte d'elle-meme si
+// prefers-reduced-motion est actif ou si WebGL echoue : le hero reste
+// alors lisible sur le seul fond CSS.
 import '../../styles/hero.css';
-
-// TODO : porter depuis CLAUDE.md §3.2 (contenu) et §5.1 (styles). La scene Three.js HeroScene s'insere ici en client:visible (§8.4). Stub d'arborescence, pas encore implemente.
+import HeroScene from '../islands/HeroScene';
 ---
 
-<section id="hero" class="section"></section>
+<section id="hero" class="section">
+  <HeroScene client:visible />
+
+  <div class="hero-inner">
+    <p class="hero-prologue">
+      &laquo;&nbsp;Un site ne suffit plus à convaincre un client exigeant.&nbsp;&raquo;
+    </p>
+
+    <h1 class="hero-title">
+      <span class="line"><span>ENZO</span></span>
+      <span class="line"><span>COUTEAU</span></span>
+    </h1>
+
+    <p class="hero-sub">
+      Réalisateur &amp; développeur web — je transforme des projets ambitieux
+      en expériences qu'on n'oublie pas, et qui convertissent.
+    </p>
+
+    <div class="scroll-cue">
+      <span>ENTRER EN SALLE</span>
+      <div class="chevron" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /*
+    Seul ajout au CSS de la §5.1, et il est structurel, pas esthetique :
+    la spec stylise `.hero-title .line` avec overflow:hidden sans fixer son
+    `display`. Dans le prototype c'etait un element de type bloc. Ici le titre
+    est un <h1> — dont le modele de contenu HTML n'admet que du phrasing
+    content, donc des <span> — et un span inline ne peut pas clipper ses
+    enfants. On lui rend le comportement bloc attendu par la spec.
+    Garder le <h1> est necessaire pour l'objectif Lighthouse 100 de la §9.
+  */
+  .hero-title .line {
+    display: block;
+  }
+</style>
