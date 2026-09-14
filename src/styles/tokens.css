@@ -1,0 +1,62 @@
+/* ---------------------------------------------------------------------------
+   Design tokens — source de vérité unique (CLAUDE.md §4)
+   Règle absolue : le fond n'est JAMAIS #000. Toujours une variante ci-dessous.
+   Polices autorisées : Fraunces (display/éditorial) et Space Grotesk (UI).
+   Aucune autre famille ne doit être introduite.
+--------------------------------------------------------------------------- */
+
+:root{
+  /* Couleurs — velours de salle de cinéma */
+  --black-deep:   #050403;
+  --black:        #0b0908;
+  --black-soft:   #14100e;
+  --bordeaux:     #4a1023;
+  --bordeaux-lt:  #7c1f3f;
+  --bordeaux-dk:  #2c0a15;
+  --gold:         #c9a24b;
+  --gold-bright:  #ecc978;
+  --gold-dim:     rgba(201,162,75,0.35);
+  --silver:       #a8adb6;
+  --silver-dim:   #6c6f75;
+  --cream:        #ece4d3;
+  --cream-dim:    #b9b2a3;
+
+  /* Typo */
+  --f-display: "Fraunces", Georgia, serif;
+  --f-sans: "Space Grotesk", Arial, sans-serif;
+
+  /* Rythme */
+  --frame: clamp(16px, 2.6vw, 30px);
+  --frame-mobile: clamp(10px, 3.5vw, 16px);
+  --radius: 2px;
+
+  --ease-out: cubic-bezier(.16,.84,.44,1);
+  --ease-io: cubic-bezier(.65,0,.35,1);
+}
+
+/* ---------------------------------------------------------------------------
+   Exposition des mêmes valeurs à Tailwind (équivalent Tailwind 4 du
+   `theme.extend.colors` / `theme.extend.fontFamily` demandé en §4).
+   `inline` inline la référence `var()` dans les utilitaires, ce qui garde
+   le bloc `:root` ci-dessus comme unique source de vérité — aucune valeur
+   n'est dupliquée.
+--------------------------------------------------------------------------- */
+
+@theme inline {
+  --color-black-deep:  var(--black-deep);
+  --color-black:       var(--black);
+  --color-black-soft:  var(--black-soft);
+  --color-bordeaux:    var(--bordeaux);
+  --color-bordeaux-lt: var(--bordeaux-lt);
+  --color-bordeaux-dk: var(--bordeaux-dk);
+  --color-gold:        var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-gold-dim:    var(--gold-dim);
+  --color-silver:      var(--silver);
+  --color-silver-dim:  var(--silver-dim);
+  --color-cream:       var(--cream);
+  --color-cream-dim:   var(--cream-dim);
+
+  --font-display: var(--f-display);
+  --font-sans:    var(--f-sans);
+}

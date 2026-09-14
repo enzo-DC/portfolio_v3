@@ -1,0 +1,40 @@
+/* Acte 0 — Hero (CLAUDE.md §5.1)
+   Copie verbatim depuis CLAUDE.md — ne pas reinventer, voir la spec. */
+
+#hero{ align-items:center; text-align:center; padding-top: clamp(120px,20vw,170px); }
+#hero-canvas{ position:absolute; inset:0; z-index:0; opacity: 0.9; }
+.hero-inner{ position:relative; z-index:2; max-width: 900px; margin: 0 auto; }
+
+.hero-prologue{
+  font-family: var(--f-display); font-style: italic; font-weight: 400;
+  font-size: clamp(1rem, 2vw, 1.3rem); color: var(--cream-dim);
+  margin-bottom: clamp(20px,3vw,32px);
+  filter: blur(6px); opacity:0; transform: translateY(8px);
+}
+.hero-title{
+  font-family: var(--f-display); font-weight: 500;
+  font-size: clamp(3.6rem, 13vw, 9.5rem); line-height: 0.9; letter-spacing: -0.01em;
+  color: var(--cream); text-shadow: 0 0 60px rgba(201,162,75,0.12);
+}
+.hero-title .line{ overflow:hidden; }
+.hero-title .line span{ display:block; filter: blur(14px); opacity: 0; transform: translateY(30%) scale(1.04); }
+
+.hero-sub{
+  margin: clamp(26px,4vw,36px) auto 0; max-width: 46ch;
+  font-family: var(--f-sans); font-size: clamp(0.95rem, 1.4vw, 1.05rem); line-height: 1.6;
+  color: var(--cream-dim); opacity:0; transform: translateY(10px);
+}
+.scroll-cue{
+  margin: clamp(48px,7vw,72px) auto 0; display:flex; flex-direction:column; align-items:center; gap:10px;
+  font-size: 11px; letter-spacing:.16em; color: var(--silver); opacity:0;
+}
+.scroll-cue .chevron{
+  width: 1px; height: 30px; background: linear-gradient(var(--gold), transparent);
+  position: relative; animation: cue-run 1.8s var(--ease-io) infinite;
+}
+@keyframes cue-run{
+  0%{ transform: scaleY(0); transform-origin: top; opacity: 0;}
+  40%{ transform: scaleY(1); transform-origin: top; opacity:1;}
+  60%{ transform: scaleY(1); transform-origin: bottom; opacity:1;}
+  100%{ transform: scaleY(0); transform-origin: bottom; opacity:0;}
+}

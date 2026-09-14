@@ -1,0 +1,44 @@
+/* Acte I — Projets / "La seance" (CLAUDE.md §5.2)
+   Copie verbatim depuis CLAUDE.md — ne pas reinventer, voir la spec. */
+
+#projects{ overflow: hidden; padding-left:0; padding-right:0; }
+.projects-head{ padding: 0 var(--frame); margin-bottom: clamp(30px,5vw,50px); }
+.reel-viewport{ overflow: hidden; }
+.reel-track{ display:flex; gap: clamp(20px, 3vw, 40px); padding: 10px var(--frame) 40px; width: max-content; }
+
+@media (max-width: 999px){
+  .reel-track{ overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+  .poster{ scroll-snap-align: start; }
+}
+
+.poster{
+  position: relative; flex: none; width: min(78vw, 380px); aspect-ratio: 3/4.1;
+  border: 1px solid var(--gold-dim);
+  background: linear-gradient(160deg, var(--bordeaux-dk), var(--black-soft) 60%);
+  padding: 26px 24px; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden;
+}
+.poster::before, .poster::after{ /* perforations façon pellicule */
+  content:""; position:absolute; left:0; right:0; height: 22px;
+  background-image: radial-gradient(circle, var(--black-deep) 3.5px, transparent 3.6px);
+  background-size: 22px 22px; background-position: 10px center; background-repeat: repeat-x; opacity: 0.9;
+}
+.poster::before{ top:0; }
+.poster::after{ bottom:0; }
+.poster-glow{
+  position:absolute; inset:0;
+  background: radial-gradient(circle at 30% 20%, var(--poster-tint, var(--gold-dim)), transparent 60%);
+  opacity: 0.5; transition: opacity .4s var(--ease-out);
+}
+.poster:hover .poster-glow{ opacity: 0.9; }
+.poster-index{ font-family: var(--f-sans); font-size: 11px; color: var(--silver-dim); letter-spacing:.1em; margin-bottom: 14px; }
+.poster-title{ font-family: var(--f-display); font-weight: 500; font-size: clamp(1.7rem, 3vw, 2.3rem); color: var(--cream); margin-bottom: 10px; position:relative; z-index:2; }
+.poster-role{ font-size: 11px; letter-spacing:.08em; color: var(--gold); margin-bottom: 14px; position:relative; z-index:2; }
+.poster-pitch{ font-family: var(--f-display); font-size: 0.98rem; line-height:1.55; color: var(--cream-dim); max-width: 32ch; position:relative; z-index:2; }
+.poster-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top: 16px; position:relative; z-index:2; }
+.poster-tags span{ font-size: 10px; letter-spacing:.06em; color: var(--silver); border: 1px solid rgba(168,173,182,0.3); padding: 3px 8px; }
+.poster-link{
+  margin-top: 18px; font-size: 11px; letter-spacing:.08em; color: var(--gold-bright);
+  display:inline-flex; align-items:center; gap:6px; position:relative; z-index:2;
+  width: fit-content; border-bottom: 1px solid transparent; transition: border-color .2s;
+}
+.poster-link:hover{ border-color: var(--gold-bright); }

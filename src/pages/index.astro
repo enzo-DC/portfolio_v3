@@ -1,0 +1,45 @@
+---
+// Page unique du site (CLAUDE.md §1 : une seule page `/`, scroll vertical,
+// navigation par ancres). Structure issue de l'arborescence cible §7.
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+import GrainOverlay from '../components/layout/GrainOverlay.astro';
+import Letterbox from '../components/layout/Letterbox.astro';
+import FilmstripNav from '../components/layout/FilmstripNav.astro';
+
+import Hero from '../components/sections/Hero.astro';
+import Projects from '../components/sections/Projects.astro';
+import About from '../components/sections/About.astro';
+import Contact from '../components/sections/Contact.astro';
+import Credits from '../components/sections/Credits.astro';
+
+import SmoothScrollProvider from '../components/islands/SmoothScrollProvider';
+import CustomCursor from '../components/islands/CustomCursor';
+import SceneTransitions from '../components/islands/SceneTransitions';
+---
+
+<BaseLayout>
+  {/* Overlays plein ecran — stylees dans global.css (§5), pilotees par les ilots. */}
+  <div id="iris-intro" aria-hidden="true"></div>
+  <div id="cursor-ring" aria-hidden="true"><span>VOIR</span></div>
+  <GrainOverlay />
+
+  <Letterbox />
+  <FilmstripNav />
+
+  {/* #scroll-content : cible du smooth scroll Lenis (§8.1). */}
+  <div id="scroll-content">
+    <main>
+      <Hero />
+      <Projects />
+      <About />
+      <Contact />
+    </main>
+    <Credits />
+  </div>
+
+  {/* Ilots clients — directives issues de l'arborescence §7. */}
+  <SmoothScrollProvider client:load />
+  <CustomCursor client:media="(pointer: fine)" />
+  <SceneTransitions client:load />
+</BaseLayout>

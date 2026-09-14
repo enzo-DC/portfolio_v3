@@ -1,0 +1,54 @@
+---
+// Layout racine — <head>, meta/OG (CLAUDE.md §3.1 et §10), polices, styles globaux.
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Enzo Couteau — Réalisateur & développeur web',
+  description = 'Enzo Couteau — développeur web. Chaque projet est traité comme un film : réalisation, code, direction technique.',
+} = Astro.props;
+
+const ogDescription =
+  'Chaque projet est traité comme un film : réalisation, code, direction technique.';
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b0908" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={ogDescription} />
+    <!-- TODO (§11) : produire og-image.jpg (1200x630) et favicon.svg. -->
+    <meta property="og:image" content="/og-image.jpg" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!--
+      Polices : Fraunces (display) + Space Grotesk (UI). Aucune autre famille.
+      TODO (§11) : arbitrer CDN Google Fonts vs auto-hebergement en .woff2 dans
+      public/fonts. L'auto-hebergement supprime un aller-retour DNS sur le
+      chemin critique et evite la dependance tierce — recommande pour tenir
+      l'objectif Lighthouse de la §12.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,340;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
