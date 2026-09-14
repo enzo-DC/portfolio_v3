@@ -8,8 +8,13 @@
    le fond n'est jamais du blanc pur, le texte n'est jamais du noir pur.
 
    Les valeurs de couleur sont CALCULEES pour respecter WCAG AA, pas
-   estimees. Toute modification impose de recalculer les cinq ratios
-   documentes dans la spec.
+   estimees. Toute modification impose de recalculer les ratios documentes
+   dans la spec.
+
+   ATTENTION : verifier chaque encre sur les DEUX fonds, `--papier` et
+   `--papier-2`. Le rouge precedent, #C4331B, passait a 4,71 sur papier mais
+   echouait a 4,04 sur papier-2 — fond des cartes et du formulaire. L'oubli
+   n'a ete rattrape que par un scan axe-core.
 --------------------------------------------------------------------------- */
 
 :root{
@@ -18,12 +23,12 @@
   --papier-2:    #E7DCCA;  /* separateurs, fonds de carte                  */
   --encre:       #16120F;  /* texte principal      — 16,02 sur papier      */
   --gris-papier: #675F55;  /* texte secondaire     —  5,40 sur papier      */
-  --rouge:       #C4331B;  /* accent unique        —  4,71 dans les 2 sens */
+  --rouge:       #B02B16;  /* accent unique        —  5,64 papier / 4,84 papier-2 */
 
   /* Derivees, pour les etats et les surimpressions */
   --encre-08:    rgba(22, 18, 15, 0.08);
   --encre-16:    rgba(22, 18, 15, 0.16);
-  --rouge-12:    rgba(196, 51, 27, 0.12);
+  --rouge-12:    rgba(176, 43, 22, 0.12);
 
   /* Typo — trois familles, aucune autre ne doit etre introduite */
   --f-display:   "Anton", "Arial Narrow", Impact, sans-serif;

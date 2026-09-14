@@ -55,7 +55,10 @@ const roles = [
             autocomplete="off"
             aria-errormessage="projet-erreur"
           />
-          <span class="erreur" id="projet-erreur">Indiquez un nom de projet.</span>
+          {/* `aria-live` est indispensable : `aria-errormessage` relie le
+              champ au texte mais ne garantit pas son annonce. Signale par
+              axe-core en violation critique de la 4.1.2. */}
+          <span class="erreur" aria-live="polite" id="projet-erreur">Indiquez un nom de projet.</span>
         </div>
 
         <div class="champ">
@@ -69,7 +72,7 @@ const roles = [
             <option value="" disabled selected>Sélectionner</option>
             {roles.map((r) => <option value={r}>{r}</option>)}
           </select>
-          <span class="erreur" id="role-erreur">Choisissez un rôle.</span>
+          <span class="erreur" aria-live="polite" id="role-erreur">Choisissez un rôle.</span>
         </div>
 
         <div class="champ">
@@ -82,7 +85,7 @@ const roles = [
             autocomplete="email"
             aria-errormessage="email-erreur"
           />
-          <span class="erreur" id="email-erreur">
+          <span class="erreur" aria-live="polite" id="email-erreur">
             Indiquez une adresse e-mail valide.
           </span>
         </div>
@@ -95,7 +98,7 @@ const roles = [
             id="message" name="message" required
             placeholder="Racontez-moi le projet en quelques phrases…"
             aria-errormessage="message-erreur"></textarea>
-          <span class="erreur" id="message-erreur">
+          <span class="erreur" aria-live="polite" id="message-erreur">
             Décrivez le projet en quelques phrases.
           </span>
         </div>
