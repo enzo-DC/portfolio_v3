@@ -1,8 +1,34 @@
 ---
-// Credits — generique de fin / footer
+// Credits — generique de fin.
+// Contenu : CLAUDE.md §3.6, qui fait toujours autorite.
 import '../../styles/contact.css';
 
-// TODO : porter depuis CLAUDE.md §3.6 (contenu) et §5.4 (styles). Stub d'arborescence, pas encore implemente.
+const EMAIL = 'enzocouteau.pro@gmail.com';
+const annee = new Date().getFullYear();
 ---
 
-<footer id="credits" class="section"></footer>
+<footer class="generique">
+  <dl class="generique-bloc">
+    <dt>Réalisation &amp; code</dt>
+    <dd>Enzo Couteau</dd>
+  </dl>
+
+  <dl class="generique-bloc">
+    <dt>Contact</dt>
+    <dd><a class="lien" href={`mailto:${EMAIL}`}>{EMAIL}</a></dd>
+  </dl>
+
+  <dl class="generique-bloc">
+    <dt>Portfolio</dt>
+    <dd>GitHub sur demande</dd>
+  </dl>
+
+  <a class="haut" href="#hero">
+    Retour en haut
+    <span class="fleche" aria-hidden="true">↑</span>
+  </a>
+
+  <p class="generique-copyright">
+    © {annee} Enzo Couteau — Studio Couteau. Tous droits réservés.
+  </p>
+</footer>

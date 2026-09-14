@@ -1,8 +1,118 @@
 ---
-// Contact — Acte III — "Le casting". Accueille CastingForm en client:visible (§8.7)
+// Contact — Acte III, « L'appel de casting ».
+// Contenu : CLAUDE.md §3.5, qui fait toujours autorite.
+//
+// Le formulaire est rendu cote serveur : il reste lisible et comprehensible
+// sans JavaScript. L'envoi, lui, demande du JS (§8.7) — d'ou le lien mailto
+// de secours sous le formulaire, prevu par la spec, qui reste le chemin
+// utilisable si le script ne s'execute pas.
 import '../../styles/contact.css';
+import CastingForm from '../islands/CastingForm';
 
-// TODO : porter depuis CLAUDE.md §3.5 (contenu) et §5.4 (styles). Stub d'arborescence, pas encore implemente.
+const EMAIL = 'enzocouteau.pro@gmail.com';
+
+// Options du champ « role », §3.5.
+const roles = [
+  'Studio / agence',
+  'Marque / grand compte',
+  'Porteur de projet / startup',
+  'Autre',
+];
 ---
 
-<section id="contact" class="section" data-act="3"></section>
+<section id="contact" class="section" data-act="3">
+  <div class="section-head">
+    <p class="acte-num">Acte <b>III</b></p>
+    <h2 class="section-title">L'appel de casting</h2>
+  </div>
+
+  <div class="casting">
+    <div>
+      <p class="casting-chapo">
+        Vous avez un rôle à distribuer pour votre prochain projet&nbsp;?
+        Envoyez-moi le script.
+      </p>
+
+      <p class="casting-secours">
+        {/* Espace explicite : Astro applique les regles d'espacement de JSX
+            et supprime le blanc de fin de ligne avant un element. */}
+        Ou écrivez directement à{' '}
+        <a class="lien" href={`mailto:${EMAIL}`}>{EMAIL}</a>
+      </p>
+    </div>
+
+    <div>
+      <p class="clap"><span>Studio Couteau — Prise 01</span></p>
+
+      <form class="formulaire" id="casting">
+        <div class="champ">
+          <label for="projet">
+            Nom du projet <span class="requis" aria-hidden="true">*</span>
+          </label>
+          <input
+            type="text" id="projet" name="projet" required
+            placeholder="Ex. Refonte du site X"
+            autocomplete="off"
+            aria-errormessage="projet-erreur"
+          />
+          <span class="erreur" id="projet-erreur">Indiquez un nom de projet.</span>
+        </div>
+
+        <div class="champ">
+          <label for="role">
+            Votre rôle <span class="requis" aria-hidden="true">*</span>
+          </label>
+          {/* Premiere option a `value=""` et `disabled` : elle ne peut pas
+              constituer une reponse valide, et `:user-invalid` ne se
+              declenchera qu'apres une interaction reelle. */}
+          <select id="role" name="role" required aria-errormessage="role-erreur">
+            <option value="" disabled selected>Sélectionner</option>
+            {roles.map((r) => <option value={r}>{r}</option>)}
+          </select>
+          <span class="erreur" id="role-erreur">Choisissez un rôle.</span>
+        </div>
+
+        <div class="champ">
+          <label for="email">
+            Contact <span class="requis" aria-hidden="true">*</span>
+          </label>
+          <input
+            type="email" id="email" name="email" required
+            placeholder="vous@exemple.com"
+            autocomplete="email"
+            aria-errormessage="email-erreur"
+          />
+          <span class="erreur" id="email-erreur">
+            Indiquez une adresse e-mail valide.
+          </span>
+        </div>
+
+        <div class="champ">
+          <label for="message">
+            Le synopsis <span class="requis" aria-hidden="true">*</span>
+          </label>
+          <textarea
+            id="message" name="message" required
+            placeholder="Racontez-moi le projet en quelques phrases…"
+            aria-errormessage="message-erreur"></textarea>
+          <span class="erreur" id="message-erreur">
+            Décrivez le projet en quelques phrases.
+          </span>
+        </div>
+
+        <button class="envoyer" type="submit">Envoyer le script</button>
+
+        {/* `role="status"` implique `aria-live="polite"` : le retour d'envoi
+            est annonce sans interrompre la lecture en cours (§9). */}
+        <p class="statut-envoi" id="statut-envoi" role="status"></p>
+      </form>
+
+      {/* `client:idle` et non `client:visible` : cet ilot ne rend AUCUN
+          balisage, donc `client:visible` n'aurait aucun element dimensionne
+          a observer et l'hydratation ne se declencherait jamais. Constate au
+          navigateur : le formulaire s'affichait correctement mais
+          `aria-invalid` n'etait jamais pose et l'envoi ne partait pas. */}
+      <CastingForm client:idle />
+    </div>
+  </div>
+</section>

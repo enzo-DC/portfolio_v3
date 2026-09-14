@@ -1,5 +1,209 @@
-/* Acte III — Le casting et generique — a porter dans la direction « affiche de cinema ».
-   L'ancienne feuille etait entierement construite pour le fond sombre
-   (noir velours, or, bordeaux) : la conserver ferait fuir cette palette
-   dans la nouvelle. Videe volontairement en attendant le portage.
-   Reference : docs/superpowers/specs/2026-09-14-refonte-visuelle-design.md */
+/* ---------------------------------------------------------------------------
+   Acte III — L'appel de casting, et generique de fin
+   Reference : docs/superpowers/specs/2026-09-14-refonte-visuelle-design.md
+   Contenu : CLAUDE.md §3.5 et §3.6, qui font toujours autorite.
+
+   Remplace la section 5.4 du CLAUDE.md, entierement batie pour le fond
+   sombre.
+--------------------------------------------------------------------------- */
+
+.casting{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+}
+@media (max-width: 899px){
+  .casting{ grid-template-columns: minmax(0, 1fr); }
+}
+
+.casting-chapo{
+  font-family: var(--f-editorial);
+  font-size: clamp(1.15rem, 1.9vw, 1.5rem);
+  line-height: 1.45;
+  color: var(--gris-papier);
+  max-width: 28ch;
+}
+
+.casting-secours{
+  margin-top: clamp(20px, 3vw, 30px);
+  font-size: 14px;
+  color: var(--gris-papier);
+}
+
+/* --- Bandeau clapette ------------------------------------------------------
+   Purement decoratif : les bandes sont masquees aux technologies
+   d'assistance, seul le texte compte.
+--------------------------------------------------------------------------- */
+
+.clap{
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 16px;
+  background: var(--encre);
+  color: var(--papier);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+}
+.clap::before{
+  content: ""; flex: 1 1 auto; height: 14px;
+  background: repeating-linear-gradient(
+    -58deg,
+    var(--papier) 0 8px,
+    var(--encre) 8px 16px
+  );
+  order: 2;
+}
+
+/* --- Formulaire ------------------------------------------------------------ */
+
+.formulaire{
+  border: 1.5px solid var(--encre);
+  border-top: none;
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
+  background: var(--papier-2);
+  padding: clamp(18px, 2.4vw, 28px);
+  display: grid;
+  gap: 18px;
+}
+
+.champ{ display: grid; gap: 6px; }
+
+/* Etiquette explicite et visible. La §9 interdit le placeholder tenant lieu
+   d'etiquette : il disparait a la saisie et n'est pas annonce de maniere
+   fiable. */
+.champ label{
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gris-papier);
+}
+.champ label .requis{ color: var(--rouge); }
+
+.champ input,
+.champ select,
+.champ textarea{
+  font: inherit;
+  font-size: 15px;
+  color: var(--encre);
+  background: var(--papier);
+  border: 1px solid var(--encre-16);
+  border-radius: var(--radius);
+  padding: 11px 12px;
+  width: 100%;
+  /* 44px de haut minimum, cible tactile de la §9. */
+  min-height: 44px;
+  transition: border-color .18s var(--ease-out);
+}
+.champ textarea{ min-height: 130px; resize: vertical; line-height: 1.5; }
+.champ input::placeholder,
+.champ textarea::placeholder{ color: var(--gris-papier); opacity: 0.75; }
+
+.champ input:hover,
+.champ select:hover,
+.champ textarea:hover{ border-color: var(--encre); }
+
+/* --- Etats de validation ---------------------------------------------------
+   `:user-invalid` et non `:invalid` : le premier n'entre en jeu qu'APRES une
+   interaction reelle, le second marquerait en rouge tous les champs requis
+   des le chargement de la page.
+
+   Baseline largement disponible depuis 2023-11-02 (Chrome 119, Edge 119,
+   Firefox 88, Safari 16.5) : aucun repli n'est necessaire.
+--------------------------------------------------------------------------- */
+
+.champ input:user-invalid,
+.champ select:user-invalid,
+.champ textarea:user-invalid{
+  border-color: var(--rouge);
+}
+.champ input:user-valid,
+.champ select:user-valid,
+.champ textarea:user-valid{
+  border-color: var(--encre);
+}
+
+.erreur{
+  display: none;
+  font-size: 12.5px;
+  color: var(--rouge);
+}
+.champ input:user-invalid ~ .erreur,
+.champ select:user-invalid ~ .erreur,
+.champ textarea:user-invalid ~ .erreur{ display: block; }
+
+/* --- Envoi ----------------------------------------------------------------- */
+
+.envoyer{
+  justify-self: start;
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--papier);
+  background: var(--rouge);
+  border-radius: var(--radius);
+  padding: 14px 26px;
+  min-height: 44px;
+  transition: background .18s var(--ease-out);
+}
+.envoyer:hover{ background: var(--encre); }
+.envoyer[disabled]{ opacity: 0.6; cursor: progress; }
+
+/* Retour d'envoi. `role="status"` implique `aria-live="polite"` : le message
+   est annonce sans interrompre la lecture en cours (§9). Reserve sa hauteur
+   pour que l'apparition ne decale pas la mise en page. */
+.statut-envoi{
+  min-height: 1.2em;
+  font-size: 13px;
+  color: var(--gris-papier);
+}
+.statut-envoi[data-etat="erreur"]{ color: var(--rouge); }
+
+/* --- Generique de fin ------------------------------------------------------ */
+
+.generique{
+  border-top: 1px solid var(--encre-16);
+  padding: clamp(28px, 4vw, 44px) var(--frame);
+  display: flex; flex-wrap: wrap;
+  align-items: flex-start; justify-content: space-between;
+  gap: clamp(18px, 3vw, 40px);
+}
+
+.generique-bloc{ display: grid; gap: 4px; font-size: 13px; }
+.generique-bloc dt{
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gris-papier);
+}
+.generique-bloc dd{ margin: 0; color: var(--encre); }
+
+.generique-copyright{
+  flex-basis: 100%;
+  font-size: 12px;
+  color: var(--gris-papier);
+  padding-top: clamp(14px, 2vw, 22px);
+  border-top: 1px solid var(--encre-08);
+}
+
+/* Retour en haut : la marque pivote d'un demi-tour au survol, seul reste du
+   `.brand-mark` de l'ancienne direction (§3.6). */
+.haut{
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gris-papier);
+  min-height: 44px;
+}
+.haut .fleche{
+  display: grid; place-items: center;
+  width: 30px; height: 30px; flex: none;
+  border: 1.5px solid var(--encre-16);
+  border-radius: 50%;
+  transition: transform .3s var(--ease-io), border-color .2s, color .2s;
+}
+.haut:hover{ color: var(--encre); }
+.haut:hover .fleche{
+  transform: rotate(180deg);
+  border-color: var(--rouge);
+  color: var(--rouge);
+}
+@media (prefers-reduced-motion: reduce){
+  .haut .fleche{ transition: none; }
+  .haut:hover .fleche{ transform: none; }
+}
