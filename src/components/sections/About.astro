@@ -1,8 +1,62 @@
 ---
-// About — Acte II — "Le scenario"
+// About — Acte II, « Le scenario ».
+// Contenu : CLAUDE.md §3.4, qui fait toujours autorite. Le texte de bio y est
+// explicitement marque comme un PLACEHOLDER a valider : aucune donnee
+// biographique reelle (annees d'experience, noms de clients) n'y figure, et
+// il ne faut pas en inventer. Voir §11, point « valider ou reecrire la bio ».
 import '../../styles/about.css';
 
-// TODO : porter depuis CLAUDE.md §3.4 (contenu) et §5.3 (styles). Stub d'arborescence, pas encore implemente.
+// La fiche technique reprend mot pour mot les lignes de la §3.4.
+const fiche = [
+  { cle: 'Production',  valeur: 'Studio Couteau' },
+  { cle: 'Réalisateur', valeur: 'Enzo Couteau' },
+  { cle: 'Genre',       valeur: 'Web & expérience digitale' },
+  { cle: 'Format',      valeur: 'Sur-mesure, e-commerce, apps' },
+  { cle: 'Statut',      valeur: 'Dispo. pour tournage', accent: true },
+];
 ---
 
-<section id="about" class="section" data-act="2"></section>
+<section id="about" class="section" data-act="2">
+  <div class="section-head">
+    <p class="acte-num">Acte <b>II</b></p>
+    <h2 class="section-title">Le scénario</h2>
+  </div>
+
+  <div class="scenario">
+    <div>
+      <p class="bio">
+        Je m'appelle Enzo Couteau. Je code des sites depuis que j'ai compris
+        qu'une bonne interface se construit comme un bon film : un cadrage
+        précis, un rythme maîtrisé, et rien qui ne serve pas l'histoire. Entre
+        la technique et la mise en scène, je ne choisis pas — je fais les
+        deux. Chaque projet est traité comme un tournage : cahier des charges
+        en guise de scénario, prototypes comme rushes, et une obsession
+        commune pour le détail qui change tout.
+      </p>
+
+      <p class="bio-signature">
+        <a class="lien" href="#contact">Envoyer un brief</a>
+      </p>
+    </div>
+
+    <aside class="prise reveal" aria-label="Fiche technique">
+      <div class="prise-clap" aria-hidden="true"></div>
+
+      <div class="prise-entete">
+        <strong>Prise</strong>
+        <span>N&deg;&nbsp;01</span>
+      </div>
+
+      <dl class="prise-liste">
+        {
+          fiche.map((ligne) => (
+            <>
+              <dt>{ligne.cle}</dt>
+              <dd class={ligne.accent ? 'statut' : undefined}>{ligne.valeur}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </aside>
+  </div>
+</section>

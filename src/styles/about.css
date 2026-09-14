@@ -1,5 +1,143 @@
-/* Acte II — Le scenario — a porter dans la direction « affiche de cinema ».
-   L'ancienne feuille etait entierement construite pour le fond sombre
-   (noir velours, or, bordeaux) : la conserver ferait fuir cette palette
-   dans la nouvelle. Videe volontairement en attendant le portage.
-   Reference : docs/superpowers/specs/2026-09-14-refonte-visuelle-design.md */
+/* ---------------------------------------------------------------------------
+   Acte II — Le scenario
+   Reference : docs/superpowers/specs/2026-09-14-refonte-visuelle-design.md
+   Contenu : CLAUDE.md §3.4, qui fait toujours autorite.
+
+   Remplace la section 5.3 du CLAUDE.md, entierement batie pour le fond
+   sombre.
+--------------------------------------------------------------------------- */
+
+.scenario{
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+}
+
+/* Une colonne sous 900px : la fiche technique a besoin de sa largeur pour
+   que ses lignes ne se cassent pas en deux. */
+@media (max-width: 899px){
+  .scenario{ grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --- Bio -------------------------------------------------------------------
+   Balayage au scroll (§8.5b) : le texte passe du gris a l'encre au fil de la
+   lecture. C'est un `background-position` sous `background-clip: text`, pas
+   une apparition en fondu — la spec d'origine ecarte explicitement le fondu
+   generique.
+
+   Realise en CSS pur, sans JavaScript. Les animations pilotees par le scroll
+   ne sont pas supportees par Firefox : l'effet etant purement decoratif, on
+   applique l'amelioration progressive recommandee, sans repli. Firefox
+   affiche la bio directement dans sa couleur de lecture.
+
+   Le degrade n'emploie que des couleurs VISIBLES aux deux extremites : meme
+   si l'animation ne se declenchait pas, le texte resterait lisible. Jamais
+   de `color: transparent` sans filet.
+--------------------------------------------------------------------------- */
+
+.bio{
+  font-family: var(--f-editorial);
+  font-size: clamp(1.15rem, 1.9vw, 1.55rem);
+  line-height: 1.5;
+  color: var(--gris-papier);
+  max-width: 34ch;
+}
+
+@supports ((animation-timeline: view()) and (animation-range: entry)){
+  @media (prefers-reduced-motion: no-preference){
+    .bio{
+      color: transparent;
+      background-image: linear-gradient(
+        90deg,
+        var(--encre) 44%,
+        var(--gris-papier) 56%
+      );
+      background-size: 200% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: bio-balayage linear both;
+      /* `animation-timeline` et `animation-range` APRES le raccourci
+         `animation`, sinon celui-ci reinitialise la timeline. */
+      animation-timeline: view();
+      animation-range: entry 35% cover 60%;
+    }
+  }
+}
+@keyframes bio-balayage{ to{ background-position: 0 0; } }
+
+.bio-signature{
+  margin-top: clamp(20px, 3vw, 32px);
+  font-size: 13px;
+  color: var(--gris-papier);
+}
+
+/* --- Fiche « prise » -------------------------------------------------------
+   La clapette du concept d'origine devient une fiche technique imprimee,
+   comme le bloc de credits au bas d'une affiche.
+--------------------------------------------------------------------------- */
+
+.prise{
+  border: 1.5px solid var(--encre);
+  border-radius: var(--radius-card);
+  background: var(--papier-2);
+  overflow: hidden;
+  transform: rotate(-0.6deg);   /* legerement de travers, comme pose a la main */
+}
+
+/* Bandes diagonales de la clapette. Purement decoratif : masque aux
+   technologies d'assistance. */
+.prise-clap{
+  height: 26px;
+  background: repeating-linear-gradient(
+    -58deg,
+    var(--encre) 0 13px,
+    var(--papier) 13px 26px
+  );
+}
+
+.prise-entete{
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--encre-16);
+}
+.prise-entete strong{
+  font-family: var(--f-display);
+  font-weight: 400; font-size: 1.5rem;
+  text-transform: uppercase; letter-spacing: 0.02em;
+}
+.prise-entete span{
+  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gris-papier);
+  font-variant-numeric: tabular-nums;
+}
+
+.prise-liste{
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0;
+  margin: 0;
+  padding: 6px 18px 18px;
+}
+.prise-liste dt{
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gris-papier);
+  padding: 11px 16px 11px 0;
+  border-bottom: 1px solid var(--encre-08);
+  white-space: nowrap;
+}
+.prise-liste dd{
+  font-size: 14px;
+  color: var(--encre);
+  padding: 11px 0;
+  border-bottom: 1px solid var(--encre-08);
+  text-align: right;
+}
+.prise-liste dt:last-of-type,
+.prise-liste dd:last-of-type{ border-bottom: none; }
+
+/* Le statut est la seule information « vendeuse » de la fiche : il porte
+   l'accent. */
+.prise-liste dd.statut{ color: var(--rouge); font-weight: 500; }
