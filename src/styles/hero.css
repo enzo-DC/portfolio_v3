@@ -1,54 +1,107 @@
-/* Acte 0 — Hero (CLAUDE.md §5.1)
-   Copie verbatim depuis CLAUDE.md — ne pas reinventer, voir la spec. */
+/* ---------------------------------------------------------------------------
+   Acte 0 — Ouverture
+   Reference : docs/superpowers/specs/2026-09-14-refonte-visuelle-design.md
 
-#hero{ align-items:center; text-align:center; padding-top: clamp(120px,20vw,170px); }
-#hero-canvas{ position:absolute; inset:0; z-index:0; opacity: 0.9; }
-.hero-inner{ position:relative; z-index:2; max-width: 900px; margin: 0 auto; }
+   Remplace la section 5.1 du CLAUDE.md. Le hero ne repose plus sur une scene
+   WebGL mais sur la typographie : le nom occupe toute la largeur, comme le
+   titre d'une affiche. C'est le principe repris de Cyd Stumpel.
+--------------------------------------------------------------------------- */
+
+#hero{
+  padding-top: clamp(28px, 4vw, 56px);
+  padding-bottom: clamp(48px, 7vw, 96px);
+}
 
 .hero-prologue{
-  font-family: var(--f-display); font-style: italic; font-weight: 400;
-  font-size: clamp(1rem, 2vw, 1.3rem); color: var(--cream-dim);
-  margin-bottom: clamp(20px,3vw,32px);
-  filter: blur(6px); opacity:0; transform: translateY(8px);
+  font-family: var(--f-editorial);
+  font-style: italic;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.4;
+  color: var(--gris-papier);
+  max-width: 30ch;
+  flex: 1 1 260px;
 }
-.hero-title{
-  font-family: var(--f-display); font-weight: 500;
-  font-size: clamp(3.6rem, 13vw, 9.5rem); line-height: 0.9; letter-spacing: -0.01em;
-  color: var(--cream); text-shadow: 0 0 60px rgba(201,162,75,0.12);
+
+/* Le nom, bord a bord.
+   27.5vw n'est pas une valeur au juge : la largeur necessaire pour que la
+   ligne la plus longue (COUTEAU, 7 signes) remplisse la gouttiere a ete
+   mesuree au navigateur a 390, 1440 et 1920px de large. Le resultat est
+   remarquablement stable — 28,1 / 28,4 / 28,8vw — parce qu'il depend des
+   metriques d'Anton et non de la fenetre. On retient 27,5, legerement sous
+   le minimum mesure, pour absorber le basculement depuis la police de repli
+   pendant le chargement. `overflow:hidden` sur `.ligne` rattrape le reste.
+   Recalculer si la police display change.
+
+   La seconde borne n'est pas cosmetique : sans elle, mesure a l'appui, le
+   sous-titre passait sous la ligne de flottaison sur TOUS les formats
+   desktop — 57px en 1440x900, 93px en 1920x1080, 155px en 1366x768. Le
+   visiteur arrivait sur un nom geant sans proposition de valeur ni indice
+   de scroll, ce qui dessert directement l'objectif de conversion.
+
+   Un `vh` fixe ne convient pas : les hauteurs fixes — barre, bande basse —
+   ne se mettent pas a l'echelle avec la fenetre. La relation a ete trouvee
+   par dichotomie au navigateur sur sept formats, de 1280x720 a 2560x1440,
+   puis resolue : le total fixe vaut 268px et les deux lignes valent 1,64
+   fois la taille de police. La valeur deduite est remarquablement stable
+   d'un format a l'autre — de 261 a 268px. On retient 275 pour la marge.
+
+   Ce 268 valait 420 tant que le prologue et le sous-titre encadraient le
+   titre verticalement. Les regrouper en une seule bande sous le nom a
+   libere 152px de hauteur, soit 100px de police en plus a 1366x768.
+
+   Sur mobile la largeur reste la contrainte active : le nom y garde son
+   plein cadrage. Sous 275px de haut, le plancher du clamp prend le relais. */
+.hero-titre{
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(3rem, min(27.5vw, (100vh - 275px) / 1.64), 40rem);
+  line-height: 0.82;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--encre);
 }
-.hero-title .line{ overflow:hidden; }
-.hero-title .line span{ display:block; filter: blur(14px); opacity: 0; transform: translateY(30%) scale(1.04); }
+.hero-titre .ligne{ display: block; overflow: hidden; }
+/* `fit-content` stabilise le rapport de forme si la ligne devient un jour
+   l'element partage d'une view transition. */
+.hero-titre .ligne > span{ display: block; width: fit-content; }
+.hero-titre .ligne:last-child > span{ color: var(--rouge); }
+
+/* Une seule bande sous le titre : prologue, proposition de valeur et appel
+   au scroll cote a cote. Empiles, ils repoussaient le contenu sous la ligne
+   de flottaison et bridaient le titre. */
+.hero-bas{
+  display: flex; flex-wrap: wrap; align-items: flex-start;
+  gap: clamp(16px, 3vw, 36px);
+  margin-top: clamp(22px, 3vw, 40px);
+  padding-top: clamp(20px, 3vw, 32px);
+  border-top: 1px solid var(--encre-16);
+}
 
 .hero-sub{
-  margin: clamp(26px,4vw,36px) auto 0; max-width: 46ch;
-  font-family: var(--f-sans); font-size: clamp(0.95rem, 1.4vw, 1.05rem); line-height: 1.6;
-  color: var(--cream-dim); opacity:0; transform: translateY(10px);
+  font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--gris-papier);
+  max-width: 38ch;
+  flex: 1 1 280px;
 }
-.scroll-cue{
-  margin: clamp(48px,7vw,72px) auto 0; display:flex; flex-direction:column; align-items:center; gap:10px;
-  font-size: 11px; letter-spacing:.16em; color: var(--silver); opacity:0;
+
+.hero-cue{
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gris-papier);
 }
-.scroll-cue .chevron{
-  width: 1px; height: 30px; background: linear-gradient(var(--gold), transparent);
-  position: relative; animation: cue-run 1.8s var(--ease-io) infinite;
+.hero-cue .trait{
+  display: block; width: 1px; height: 26px;
+  background: linear-gradient(var(--rouge), transparent);
+  animation: cue-run 1.9s var(--ease-io) infinite;
 }
 @keyframes cue-run{
-  0%{ transform: scaleY(0); transform-origin: top; opacity: 0;}
-  40%{ transform: scaleY(1); transform-origin: top; opacity:1;}
-  60%{ transform: scaleY(1); transform-origin: bottom; opacity:1;}
-  100%{ transform: scaleY(0); transform-origin: bottom; opacity:0;}
+  0%{   transform: scaleY(0); transform-origin: top;    opacity: 0; }
+  40%{  transform: scaleY(1); transform-origin: top;    opacity: 1; }
+  60%{  transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+  100%{ transform: scaleY(0); transform-origin: bottom; opacity: 0; }
 }
-
-/* ---------------------------------------------------------------------------
-   CORRECTION au CSS de la §5.1 — necessaire, pas cosmetique.
-
-   La spec declare `#hero-canvas{ position:absolute; inset:0; }`, dont
-   l'intention est sans ambiguite : le canvas doit couvrir tout le hero.
-   Mais <canvas> est un ELEMENT REMPLACE : avec `width:auto`, les quatre
-   decalages de `inset:0` sont sur-contraints et le navigateur conserve la
-   taille intrinseque du canvas (300x150). Verifie au navigateur : hero
-   1440x900, canvas 300x150.
-
-   On explicite donc les dimensions. Aucune valeur de design n'est touchee.
---------------------------------------------------------------------------- */
-#hero-canvas{ width:100%; height:100%; }
+@media (prefers-reduced-motion: reduce){
+  .hero-cue .trait{ animation: none; opacity: 1; }
+}

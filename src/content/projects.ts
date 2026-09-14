@@ -10,8 +10,11 @@ export interface Project {
   role: string;        // "Réalisation & direction technique"
   pitch: string;
   tags: string[];
-  tint: string;        // couleur d'accent CSS, ex. "#7c1f3f66"
+  tint: string;        // encre du bloc de repli, ex. "#1F4D5C"
   githubUrl: string;
+  /** Chemin du photogramme. Absent = repli sur le bloc de couleur `tint`.
+   *  Un seul composant, deux etats : deposer un fichier suffit. */
+  visuel?: string;
 }
 
 // Données fictives — À REMPLACER par les vrais projets d'Enzo.
@@ -23,7 +26,7 @@ export const projects: Project[] = [
     role: "Réalisation & direction technique",
     pitch: "Une plateforme e-commerce pensée comme une vitrine de luxe, où chaque interaction a été chorégraphiée pour convertir.",
     tags: ["Next.js", "Stripe", "Framer Motion"],
-    tint: "#7c1f3f66",
+    tint: "#1F4D5C", // bleu petrole
     githubUrl: "https://github.com/",
   },
   {
@@ -33,7 +36,7 @@ export const projects: Project[] = [
     role: "Développement front-end & animation",
     pitch: "Un tableau de bord SaaS pour une fintech, où la donnée devient narration visuelle en temps réel.",
     tags: ["React", "D3.js", "WebSocket"],
-    tint: "#c9a24b55",
+    tint: "#2E2A55", // bleu nuit
     githubUrl: "https://github.com/",
   },
   {
@@ -43,7 +46,7 @@ export const projects: Project[] = [
     role: "Direction artistique & intégration",
     pitch: "Un site vitrine pour un studio photo, pensé comme une pellicule que l'on déroule au fil du scroll.",
     tags: ["Astro", "GSAP", "Three.js"],
-    tint: "#a8adb655",
+    tint: "#7A5C2E", // sepia
     githubUrl: "https://github.com/",
   },
 ];

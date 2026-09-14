@@ -1,49 +1,34 @@
 ---
-// Hero — Acte 0 (CLAUDE.md §3.2 pour le contenu, §5.1 pour les styles).
-// La scene Three.js est montee en client:visible et rend elle-meme
-// <canvas id="hero-canvas"> (§8.4). Elle se demonte d'elle-meme si
-// prefers-reduced-motion est actif ou si WebGL echoue : le hero reste
-// alors lisible sur le seul fond CSS.
+// Hero — Acte 0, « Ouverture ».
+// Contenu : CLAUDE.md §3.2, qui fait toujours autorite.
+// Forme : spec du 2026-09-14 — typographique, plus de scene WebGL.
+//
+// Le nom ouvre la page sans rien au-dessus, comme un titre d'affiche. Le
+// prologue et la proposition de valeur sont regroupes en une seule bande
+// sous le titre : empiles verticalement, ils lui volaient ~128px de hauteur
+// et le forcaient a 53% de la largeur sur un ecran 1366x768.
 import '../../styles/hero.css';
-import HeroScene from '../islands/HeroScene';
 ---
 
 <section id="hero" class="section" data-act="0">
-  <HeroScene client:visible />
+  <h1 class="hero-titre">
+    <span class="ligne"><span>Enzo</span></span>
+    <span class="ligne"><span>Couteau</span></span>
+  </h1>
 
-  <div class="hero-inner">
+  <div class="hero-bas">
     <p class="hero-prologue">
       &laquo;&nbsp;Un site ne suffit plus à convaincre un client exigeant.&nbsp;&raquo;
     </p>
-
-    <h1 class="hero-title">
-      <span class="line"><span>ENZO</span></span>
-      <span class="line"><span>COUTEAU</span></span>
-    </h1>
 
     <p class="hero-sub">
       Réalisateur &amp; développeur web — je transforme des projets ambitieux
       en expériences qu'on n'oublie pas, et qui convertissent.
     </p>
 
-    <div class="scroll-cue">
-      <span>ENTRER EN SALLE</span>
-      <div class="chevron" aria-hidden="true"></div>
-    </div>
+    <a class="hero-cue" href="#projets">
+      Entrer en salle
+      <span class="trait" aria-hidden="true"></span>
+    </a>
   </div>
 </section>
-
-<style>
-  /*
-    Seul ajout au CSS de la §5.1, et il est structurel, pas esthetique :
-    la spec stylise `.hero-title .line` avec overflow:hidden sans fixer son
-    `display`. Dans le prototype c'etait un element de type bloc. Ici le titre
-    est un <h1> — dont le modele de contenu HTML n'admet que du phrasing
-    content, donc des <span> — et un span inline ne peut pas clipper ses
-    enfants. On lui rend le comportement bloc attendu par la spec.
-    Garder le <h1> est necessaire pour l'objectif Lighthouse 100 de la §9.
-  */
-  .hero-title .line {
-    display: block;
-  }
-</style>

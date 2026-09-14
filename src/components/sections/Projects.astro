@@ -1,24 +1,102 @@
 ---
-// Projects — Acte I, "La seance" (CLAUDE.md §3.3 pour le contenu,
-// §5.2 pour les styles, §6 pour les donnees).
+// Projects — Acte I, « La seance » (spec du 2026-09-14).
 //
-// La bobine horizontale est pilotee par SceneTransitions (§8.5a) : pin +
-// scrub au-dela de 1000px, scroll-snap natif en CSS en dessous. L'id
-// `reel-track` est celui attendu par ce script, ne pas le renommer.
+// La grille est rendue cote serveur : les projets restent visibles et
+// indexables sans JavaScript. Seul le depliage est un ilot client.
+//
+// Les panneaux de detail sont eux aussi rendus cote serveur, tous presents
+// dans le <dialog> et masques par `hidden`. L'ilot ne fait que basculer la
+// visibilite et orchestrer la transition — il ne construit aucun contenu.
 import '../../styles/projects.css';
 import { projects } from '../../content/projects';
 import Poster from './Poster.astro';
+import ProjectExpander from '../islands/ProjectExpander';
 ---
 
-<section id="projects" class="section" data-act="1">
-  <div class="projects-head">
-    <p class="act-tag">ACTE I</p>
+<section id="projets" class="section" data-act="1">
+  <div class="section-head">
+    <p class="acte-num">Acte <b>I</b></p>
     <h2 class="section-title">La séance</h2>
+    <p class="section-lede">
+      Trois projets menés de bout en bout — cadrage, réalisation, direction
+      technique. Ouvrez-en un pour voir le détail.
+    </p>
   </div>
 
-  <div class="reel-viewport">
-    <div class="reel-track" id="reel-track">
-      {projects.map((project) => <Poster project={project} />)}
-    </div>
+  <div class="affiches">
+    {projects.map((project) => <Poster project={project} />)}
   </div>
+
+  {/*
+    <dialog> natif : couche superieure, piege de focus et touche Echap geres
+    par le navigateur. `closedby="any"` ajoute la fermeture au clic exterieur
+    — non supporte par Safari, un repli JS est fourni par l'ilot.
+  */}
+  <dialog class="detail" id="detail-projet" closedby="any">
+    {
+      projects.map((project) => (
+        <article class="detail-corps" data-detail={project.slug} hidden>
+          <div class="detail-cadre" data-detail-cadre={project.slug}>
+            {
+              project.visuel ? (
+                <img
+                  class="affiche-visuel"
+                  src={project.visuel}
+                  alt={`Aperçu du projet ${project.title}`}
+                />
+              ) : (
+                <span
+                  class="affiche-bloc"
+                  style={`--affiche-teinte: ${project.tint};`}
+                  aria-hidden="true"
+                >
+                  <span>{project.index.match(/\d+/)?.[0] ?? ''}</span>
+                </span>
+              )
+            }
+          </div>
+
+          <div class="detail-texte">
+            <button
+              class="detail-fermer"
+              type="button"
+              data-fermer
+              aria-label="Fermer le détail"
+            >
+              <span aria-hidden="true">✕</span>
+            </button>
+
+            <p class="affiche-num">{project.index}</p>
+
+            {/* tabindex="-1" : le focus y est route a l'ouverture, comme
+                l'exige le guide View Transitions — l'API ne gere pas le
+                focus elle-meme. */}
+            <h3 class="detail-titre" id={`detail-titre-${project.slug}`} tabindex="-1">
+              {project.title}
+            </h3>
+
+            <p class="affiche-role">{project.role}</p>
+            <p class="detail-pitch">{project.pitch}</p>
+
+            <div class="detail-tags">
+              {project.tags.map((tag) => <span>{tag}</span>)}
+            </div>
+
+            <a
+              class="lien"
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Voir le film sur GitHub
+              <span aria-hidden="true">↗</span>
+              <span class="visually-hidden">(ouvre dans un nouvel onglet)</span>
+            </a>
+          </div>
+        </article>
+      ))
+    }
+  </dialog>
+
+  <ProjectExpander client:idle />
 </section>

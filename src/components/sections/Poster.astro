@@ -1,40 +1,57 @@
 ---
-// Poster — une carte de projet (CLAUDE.md §3.3 pour le contenu, §5.2 pour
-// les styles, §6 pour le modele de donnees).
+// Poster — une affiche de la grille (spec : Acte I).
+//
+// C'est un <button> et non un <div> cliquable : l'element ouvre un dialogue,
+// il doit donc etre annonce comme actionnable et recevoir le focus clavier
+// nativement. `aria-haspopup="dialog"` annonce ce qui va se produire.
+//
+// Deux etats, un seul composant : tant qu'aucun `visuel` n'est fourni, on
+// affiche le bloc de couleur et le numero. Deposer un fichier suffit a
+// basculer sur le photogramme, sans toucher au code.
 import type { Project } from '../../content/projects';
-import '../../styles/projects.css';
 
 interface Props {
   project: Project;
 }
 
 const { project } = Astro.props;
+
+// "Séance 01" -> "01" pour le bloc de repli.
+const numero = project.index.match(/\d+/)?.[0] ?? '';
 ---
 
-<article class="poster" style={`--poster-tint: ${project.tint};`}>
-  <div class="poster-glow" aria-hidden="true"></div>
+<button
+  class="affiche"
+  type="button"
+  data-affiche={project.slug}
+  aria-haspopup="dialog"
+  aria-label={`Ouvrir le détail du projet ${project.title}`}
+>
+  <span class="affiche-cadre" data-cadre={project.slug}>
+    {
+      project.visuel ? (
+        <img
+          class="affiche-visuel"
+          src={project.visuel}
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <span
+          class="affiche-bloc"
+          style={`--affiche-teinte: ${project.tint};`}
+          aria-hidden="true"
+        >
+          <span>{numero}</span>
+        </span>
+      )
+    }
+  </span>
 
-  <p class="poster-index">{project.index}</p>
-  <h3 class="poster-title">{project.title}</h3>
-  <p class="poster-role">{project.role}</p>
-  <p class="poster-pitch">{project.pitch}</p>
-
-  {/* Le CSS de la §5.2 cible `.poster-tags span` comme enfants flex directs :
-      on garde donc des <span>, pas une liste. */}
-  <div class="poster-tags">
-    {project.tags.map((tag) => <span>{tag}</span>)}
-  </div>
-
-  <a
-    class="poster-link"
-    href={project.githubUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Voir le film sur GitHub
-    {/* Le ↗ est un indicateur de lien sortant reel (§3.3), pas une fleche
-        decorative : il reste sur ce seul type de lien. */}
-    <span aria-hidden="true">↗</span>
-    <span class="visually-hidden">(ouvre dans un nouvel onglet)</span>
-  </a>
-</article>
+  <span class="affiche-legende">
+    <span class="affiche-num">{project.index}</span>
+    <span class="affiche-titre">{project.title}</span>
+    <span class="affiche-role">{project.role}</span>
+  </span>
+</button>
